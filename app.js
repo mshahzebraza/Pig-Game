@@ -52,7 +52,6 @@ function init(){
     round=0;
     total=[0,0];
     activePlayer=0
-    gamePlaying=true;
 
     
     // Hide Dice 
@@ -73,6 +72,9 @@ function init(){
     }    
         
     document.querySelector(".player-"+activePlayer+"-panel").classList.add("active");
+
+    gamePlaying=true;
+
 
 }
 
@@ -110,7 +112,8 @@ function roll() {
 
 
        // If Winner is available
-        if ( (round+total[activePlayer]) >= winningScore ) {
+        // if ( (round+total[activePlayer]) >= winningScore ) {     // Turn it on if you want to only win after clicking HOLD
+        if ( (round+total[activePlayer]) >= winningScore ) {        // Turn it on if you want to only win after clicking HOLD
             
             // total Update - Add score to global
             totalUpdate();
@@ -122,12 +125,12 @@ function roll() {
             document.querySelector(".player-"+activePlayer+"-panel").classList.add('winner');
             document.querySelector("#name-"+activePlayer).textContent="Winner";
 
+            // Stop Game
+            gamePlaying=false;
             
             // Hide Dice 
             diceToggle(0);
             
-            // Stop Game
-            gamePlaying=false;
         }
         
         
@@ -160,6 +163,10 @@ function hold() {
 
             // Stop Game
             gamePlaying=false;
+
+            
+            // Hide Dice 
+            diceToggle(0);
 
 
         // If Winner is not available
@@ -215,11 +222,28 @@ function totalUpdate(resetIfZero) {
 function diceToggle(truthyValueHere) {
     // truthyValueHere ? dice.style.display="block": dice.style.display="none";
 
+    // truthyValueHere ? dice1.style.opacity="1": dice1.style.opacity=".2";
+    // truthyValueHere ? dice2.style.opacity="1": dice2.style.opacity=".2";
+
+    console.log(gamePlaying);
+    
+    
     // truthyValueHere ? dice1.style.display="block": dice1.style.display="none";
     // truthyValueHere ? dice2.style.display="block": dice2.style.display="none";
 
-    truthyValueHere ? dice1.style.opacity="1": dice1.style.opacity=".2";
-    truthyValueHere ? dice2.style.opacity="1": dice2.style.opacity=".2";
+    if (gamePlaying){
+        dice1.style.display="block";
+        dice2.style.display="block";
+        truthyValueHere ? dice1.style.opacity="1": dice1.style.opacity=".2";
+        truthyValueHere ? dice2.style.opacity="1": dice2.style.opacity=".2";
+    }
+    else{
+        
+    truthyValueHere ? dice1.style.display="block": dice1.style.display="none";
+    truthyValueHere ? dice2.style.display="block": dice2.style.display="none";
+
+    }
+
     
 }
 
