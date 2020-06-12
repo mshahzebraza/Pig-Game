@@ -176,7 +176,7 @@ function hold() {
 }
 
 function updateWinLimit() {
-    winningScore=this.value;
+    this.value ? winningScore=this.value : winningScore=100; 
     // init();      // Optional : If you want to reset game for every new limit change
 }
 
@@ -195,11 +195,6 @@ function switchPlayer() {
     
     // Adding New Active Class
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
-
-    console.log("i was called");
-    console.log("round score: "+round);
-    console.log("current 1 score: "+current1);
-    console.log("current 2 score: "+current2);
     
 
 }
@@ -234,11 +229,5 @@ function roundUpdate(resetIfZero) {
     // resetIfZero === 0 ? round = 0 : round += current;
 
     document.getElementById("current-"+activePlayer).textContent=round;    
-
-    console.log("");
-    console.log("RoundUpadte Status");
-    
-    console.log("current 1 score: "+current1);
-    console.log("current 2 score: "+current2);
 
 }
