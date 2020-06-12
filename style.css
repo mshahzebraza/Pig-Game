@@ -45,7 +45,45 @@ body {
     padding: 100px;
 }
 
+form{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    margin: 1em 0;
+    box-sizing: border-box;
+    background-color: #333333;
+    color: whitesmoke;
+    padding: 1em 2em;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
 
+form>*{
+    flex: 0 0 50%;
+    /* border: 1px dashed gold; */
+}
+
+input{
+    
+    color: whitesmoke;
+    text-align: center;
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.411);
+    /* padding: 10px ; */
+    margin-right: 2em;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+    /* -webkit-appearance: none; */
+    /* margin: 0; */
+}
+input[type=number]
+{
+  -moz-appearance: textfield;
+}
 
 /**********************************************
 *** PLAYERS

@@ -20,11 +20,14 @@ var current;
 
 init();
 
+// IMPORTANT
+
+
 
 /* --------------------------- */
 /* ---- Game Events ------ */
 /* --------------------------- */
-    
+
 
 // ON NEW GAME
 document.querySelector('.btn-new').addEventListener('click',init)
@@ -35,6 +38,9 @@ document.querySelector('.btn-roll').addEventListener('click', roll)
 // ON HOLD
 document.querySelector(".btn-hold").addEventListener('click',hold)
 
+// ON CHANGING WINNING LIMIT
+// document.getElementById("winLim").addEventListener('change',updateWinLimit)
+document.getElementById("winLim").addEventListener('input',updateWinLimit)
 
 
 /* --------------------------- */
@@ -190,6 +196,14 @@ function hold() {
 
 }
 
+function updateWinLimit() {
+    x=document.getElementById("winLim").value
+    // winningScore=x    
+    winningScore=this.value;
+
+    // Optional : If you want to reset game for every new limit change
+    // init();
+}
 
 /* --------------------------- */
 /* ---- Mini Functions ------ */
