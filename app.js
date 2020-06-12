@@ -13,7 +13,11 @@ GAME RULES:
 var round,total,activePlayer;
 var gamePlaying;
 var dice = document.querySelector('.dice');
-var winningScore=18;
+var winningScore=100;
+var oldRollScore=0;
+var current;
+
+roundUpdate();
 
 init();
 
@@ -44,6 +48,9 @@ function init(){
     activePlayer=0
     gamePlaying=true;
 
+    
+    // Hide Dice 
+    diceToggle(0);  // dice.style.display="none";
 
     for(i=0;i<=1;i++){
 
@@ -68,29 +75,53 @@ function roll() {
         
     if (gamePlaying) {
         
+        
         // Random Number
-        var current = Math.floor(Math.random()*6+1);
+        current = Math.floor(Math.random()*6+1);
+
+        // Check Dual Number
+        oldRollScore === current ? console.log("equal \t\t" + oldRollScore)  : console.log("not equal:\t"+ oldRollScore + "\t" +current);
+
+        if (oldRollScore===current) {
+            // Hide Dice
+            // total=0 & update
+            // round=0 & update
+            // Switch player
+        }
+
+        // Update oldRollScore
+        oldRollScore = current;
+        
+
+
+
 
         // If Number >1 then:   
-        if (current !== 1) {
+        if (current > 1) {
             // Change & Display Dice
             dice.src = "dice-"+current+".png";
-            dice.style.display = "block";
+            diceToggle(1);
             
             // Round Update - ADD
-            round+=current;
-            document.getElementById("current-"+activePlayer).textContent=round;
+            // round+=current;
+            // document.getElementById("current-"+activePlayer).textContent=round;
+            roundUpdate();
+
 
             
         // If Number =1 then:   
         } else {
 
+            // equate current (=1) to 0
+            current=0;
+
             // Hide Dice 
-            dice.style.display="none";
+            diceToggle(0);
             
             // Round Update - ZERO  
-            round = 0;
-            document.getElementById("current-"+activePlayer).textContent=round;
+            // round = 0;
+            // document.getElementById("current-"+activePlayer).textContent=round;
+            roundUpdate(0);
 
             // Changing Active Class & Active PLayer
             switchPlayer()
@@ -113,7 +144,7 @@ function roll() {
 
             
             // Hide Dice 
-            dice.style.display="none";
+            diceToggle(0);
             
             // Stop Game
             gamePlaying=false;
@@ -131,7 +162,7 @@ function hold() {
         
         
         // Hide Dice 
-        dice.style.display="none";
+        diceToggle(1)
         
         totalUpdate();
         // // total Update - Add score to global
@@ -190,6 +221,20 @@ function totalUpdate() {
     document.getElementById("score-"+activePlayer).textContent=total[activePlayer]
     
     // Round Update 0  
-    round = 0;
-    document.getElementById("current-"+activePlayer).textContent=0;
+    // round = 0;
+    // document.getElementById("current-"+activePlayer).textContent=round;
+    roundUpdate(0);
+}
+
+
+// Accepts a truthy value to show dice
+function diceToggle(truthyValueHere) {
+    truthyValueHere ? dice.style.display="block": dice.style.display="none";
+}
+
+function roundUpdate(resetIfZero) {
+    // any =0 : round=0
+    // any !0 : round+=current
+    resetIfZero === 0 ? round = 0 : round += current;
+    document.getElementById("current-"+activePlayer).textContent=round;    
 }
