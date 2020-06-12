@@ -17,7 +17,6 @@ var winningScore=100;
 var oldRollScore=0;
 var current;
 
-roundUpdate();
 
 init();
 
@@ -78,61 +77,57 @@ function roll() {
         
         // Random Number
         current = Math.floor(Math.random()*6+1);
-
-        // Check Dual Number
-        oldRollScore === current ? console.log("equal \t\t" + oldRollScore)  : console.log("not equal:\t"+ oldRollScore + "\t" +current);
-
-        if (oldRollScore===current) {
-            // Hide Dice
-            // total=0 & update
-            // round=0 & update
-            // Switch player
-        }
-
-        // Update oldRollScore
-        oldRollScore = current;
         
 
-
-
-
-        // If Number >1 then:   
-        if (current > 1) {
-            // Change & Display Dice
-            dice.src = "dice-"+current+".png";
-            diceToggle(1);
+        // DICE Repeat - old Score repeats
+        if (oldRollScore===current) {
             
-            // Round Update - ADD
-            // round+=current;
-            // document.getElementById("current-"+activePlayer).textContent=round;
-            roundUpdate();
+            diceToggle(0);      // Hide Dice
 
-
+            totalUpdate(0);     // total=0 & update
             
-        // If Number =1 then:   
-        } else {
-
-            // equate current (=1) to 0
-            current=0;
-
-            // Hide Dice 
-            diceToggle(0);
-            
-            // Round Update - ZERO  
-            // round = 0;
-            // document.getElementById("current-"+activePlayer).textContent=round;
-            roundUpdate(0);
-
-            // Changing Active Class & Active PLayer
-            switchPlayer()
+            switchPlayer();     // Switch player
         }
+
+        // NO DICE Repeat 
+        else {
+
+            // If Number >1 then:   
+            if (current > 1) {
+
+                // Change & Display Dice
+                dice.src = "dice-"+current+".png";
+                diceToggle(1);
+                
+                roundUpdate(1); // Round Update - ADD
+
+            } 
+
+            // If Number =1 then:   
+            else {
+    
+                // Hide Dice 
+                diceToggle(0);
+                
+                // Round Update - ZERO  
+                roundUpdate(0);
+    
+                // Changing Active Class & Active PLayer
+                switchPlayer()
+            }
+
+            
+        }
+
+        // Old Score reset
+        oldRollScore = current;
         
         // If Winner is available
         if ( (round+total[activePlayer]) >= winningScore ) {
             
 
+            // total Update - Add score to global
             totalUpdate();
-            // // total Update - Add score to global
  
             
             // Remove Active Class
@@ -162,10 +157,10 @@ function hold() {
         
         
         // Hide Dice 
-        diceToggle(1)
+        diceToggle(0)
         
+        // total Update - Add score to global
         totalUpdate();
-        // // total Update - Add score to global
 
         
         // If Winner is available
@@ -183,7 +178,8 @@ function hold() {
 
 
         // If Winner is not available
-        } else {
+        } 
+        else {
             
             // Changing Active Class & Active PLayer
             switchPlayer()
@@ -202,27 +198,27 @@ function hold() {
 
 function switchPlayer() {
     
-    // Changing Old Active Class
+    // Removing Old Active Class
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
     
     // Change Player
     activePlayer ===0 ? activePlayer=1 : activePlayer =0;
     
-    // Changing New Active Class
+    // Adding New Active Class
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
 
 }
 
 
-function totalUpdate() {
+function totalUpdate(resetIfZero) {
 
-    // total Update - Add score to global
-    total[activePlayer] += round;
+    // add score for "non-zero" and reset for zero
+    resetIfZero === 0 ? total[activePlayer] = 0 : total[activePlayer] += round;
     document.getElementById("score-"+activePlayer).textContent=total[activePlayer]
+    // resetIfZero === 0 ? console.log("passed a zero xD") : console.log("passed a non-zero");
+    
     
     // Round Update 0  
-    // round = 0;
-    // document.getElementById("current-"+activePlayer).textContent=round;
     roundUpdate(0);
 }
 
@@ -233,8 +229,8 @@ function diceToggle(truthyValueHere) {
 }
 
 function roundUpdate(resetIfZero) {
-    // any =0 : round=0
-    // any !0 : round+=current
+    // increment for 'non-zero' and reset for '0'
     resetIfZero === 0 ? round = 0 : round += current;
+
     document.getElementById("current-"+activePlayer).textContent=round;    
 }
