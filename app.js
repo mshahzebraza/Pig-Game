@@ -6,23 +6,25 @@ GAME RULES:
 - BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
+
+- Challenge 3: Introduce another dice and only if one of the dice rolls to be one then round score gets reset.
 */
 
 
 
 var round,total,activePlayer;
 var gamePlaying;
-var dice = document.querySelector('.dice');
 var winningScore=100;
-var oldRollScore=0;
-var current;
-
+// var lastRollScore=0;
+// var current;
+var current1,current2;
+// var dice = document.querySelector('.dice');
+var dice1 = document.querySelector('.dice-1');
+var dice2 = document.querySelector('.dice-2');
 
 init();
 
 // IMPORTANT
-
-
 
 /* --------------------------- */
 /* ---- Game Events ------ */
@@ -39,8 +41,7 @@ document.querySelector('.btn-roll').addEventListener('click', roll)
 document.querySelector(".btn-hold").addEventListener('click',hold)
 
 // ON CHANGING WINNING LIMIT
-// document.getElementById("winLim").addEventListener('change',updateWinLimit)
-document.getElementById("winLim").addEventListener('input',updateWinLimit)
+document.getElementById("winLim").addEventListener('input' /* 'change' */,updateWinLimit)
 
 
 /* --------------------------- */
@@ -63,7 +64,7 @@ function init(){
 
         document.getElementById("score-"+i).textContent=0;
 
-        document.getElementById("name-"+i).textContent="player "+2;
+        document.getElementById("name-"+i).textContent="player "+(i+1);
         
         document.querySelector(".player-"+i+"-panel").classList.remove("winner");
         
@@ -80,62 +81,40 @@ function roll() {
         
     if (gamePlaying) {
         
-        
         // Random Number
-        current = Math.floor(Math.random()*6+1);
-        
+        current1 = Math.floor(Math.random()*6+1);
+        current2 = Math.floor(Math.random()*6+1);
 
-        // DICE Repeat - old Score repeats
-        if (oldRollScore===current) {
-            
-            diceToggle(0);      // Hide Dice
+        // Change Dice
+        dice1.src = "dice-"+current1+".png";
+        dice2.src = "dice-"+current2+".png";
 
-            totalUpdate(0);     // total=0 & update
-            
-            switchPlayer();     // Switch player
-        }
+        // If Number >1 then:   
+        if (current1 > 1 && current2 > 1) {
+            diceToggle(1);  // Toggle Dice Visibility
+            roundUpdate(1); // Round Update - ADD
+        } 
 
-        // NO DICE Repeat 
+        // If Number =1 then:   
         else {
 
-            // If Number >1 then:   
-            if (current > 1) {
-
-                // Change & Display Dice
-                dice.src = "dice-"+current+".png";
-                diceToggle(1);
-                
-                roundUpdate(1); // Round Update - ADD
-
-            } 
-
-            // If Number =1 then:   
-            else {
-    
-                // Hide Dice 
-                diceToggle(0);
-                
-                // Round Update - ZERO  
-                roundUpdate(0);
-    
-                // Changing Active Class & Active PLayer
-                switchPlayer()
-            }
-
+            // Hide Dice 
+            diceToggle(0);
             
+            // Round Update - ZERO  
+            roundUpdate(0);
+
+            // Changing Active Class & Active PLayer
+            switchPlayer()
         }
 
-        // Old Score reset
-        oldRollScore = current;
-        
-        // If Winner is available
+
+       // If Winner is available
         if ( (round+total[activePlayer]) >= winningScore ) {
             
-
             // total Update - Add score to global
             totalUpdate();
- 
-            
+        
             // Remove Active Class
             document.querySelector(".player-"+activePlayer+"-panel").classList.remove('active');
 
@@ -197,12 +176,8 @@ function hold() {
 }
 
 function updateWinLimit() {
-    x=document.getElementById("winLim").value
-    // winningScore=x    
     winningScore=this.value;
-
-    // Optional : If you want to reset game for every new limit change
-    // init();
+    // init();      // Optional : If you want to reset game for every new limit change
 }
 
 /* --------------------------- */
@@ -221,6 +196,12 @@ function switchPlayer() {
     // Adding New Active Class
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
 
+    console.log("i was called");
+    console.log("round score: "+round);
+    console.log("current 1 score: "+current1);
+    console.log("current 2 score: "+current2);
+    
+
 }
 
 
@@ -228,23 +209,36 @@ function totalUpdate(resetIfZero) {
 
     // add score for "non-zero" and reset for zero
     resetIfZero === 0 ? total[activePlayer] = 0 : total[activePlayer] += round;
-    document.getElementById("score-"+activePlayer).textContent=total[activePlayer]
-    // resetIfZero === 0 ? console.log("passed a zero xD") : console.log("passed a non-zero");
-    
+    document.getElementById("score-"+activePlayer).textContent=total[activePlayer]    
     
     // Round Update 0  
     roundUpdate(0);
 }
 
 
-// Accepts a truthy value to show dice
+// Accepts a truthy value to show BOTH dice
 function diceToggle(truthyValueHere) {
-    truthyValueHere ? dice.style.display="block": dice.style.display="none";
+    // truthyValueHere ? dice.style.display="block": dice.style.display="none";
+
+    // truthyValueHere ? dice1.style.display="block": dice1.style.display="none";
+    // truthyValueHere ? dice2.style.display="block": dice2.style.display="none";
+
+    truthyValueHere ? dice1.style.opacity="1": dice1.style.opacity=".2";
+    truthyValueHere ? dice2.style.opacity="1": dice2.style.opacity=".2";
+    
 }
 
 function roundUpdate(resetIfZero) {
     // increment for 'non-zero' and reset for '0'
-    resetIfZero === 0 ? round = 0 : round += current;
+    resetIfZero === 0 ? round = 0 : round += current1+current2;
+    // resetIfZero === 0 ? round = 0 : round += current;
 
     document.getElementById("current-"+activePlayer).textContent=round;    
+
+    console.log("");
+    console.log("RoundUpadte Status");
+    
+    console.log("current 1 score: "+current1);
+    console.log("current 2 score: "+current2);
+
 }

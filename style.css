@@ -75,11 +75,13 @@ input{
     /* padding: 10px ; */
     margin-right: 2em;
 }
-input[type=number]::-webkit-inner-spin-button,
+
+/* input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{
-    /* -webkit-appearance: none; */
-    /* margin: 0; */
+    -webkit-appearance: none;
+    margin: 0;
 }
+ */
 input[type=number]
 {
   -moz-appearance: textfield;
@@ -182,10 +184,16 @@ i {
 .dice {
     position: absolute;
     left: 50%;
-    top: 178px;
     transform: translateX(-50%);
     height: 100px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+.dice-1{
+    top: 135px;
+}
+.dice-2{
+    top: 265px;
 }
 
 .winner { background-color: #f7f7f7; }
